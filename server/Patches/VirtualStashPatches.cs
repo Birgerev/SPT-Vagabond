@@ -1,6 +1,7 @@
 using System.Reflection;
 using SPTarkov.Reflection.Patching;
 using SPTarkov.Server.Core.Callbacks;
+using SPTarkov.Server.Core.Controllers;
 using SPTarkov.Server.Core.Helpers.Commerce;
 using SPTarkov.Server.Core.Helpers.Profile;
 using SPTarkov.Server.Core.Models.Common;
@@ -189,6 +190,27 @@ public sealed class InventoryHelperAddItemToStashPatch : AbstractPatch
     public static void Prefix(MongoId sessionId, PmcData pmcData, out IDisposable __state)
     {
         __state = VirtualStashService.OpenStash(sessionId, pmcData);
+    }
+
+    [PatchFinalizer]
+    public static Exception? Finalizer(Exception? __exception, IDisposable? __state)
+    {
+        __state?.Dispose();
+        return __exception;
+    }
+}
+
+public sealed class InsuranceControllerCostPatch : AbstractPatch
+{
+    protected override MethodBase GetTargetMethod()
+    {
+        return typeof(InsuranceController).GetMethod(nameof(InsuranceController.Cost))!;
+    }
+
+    [PatchPrefix]
+    public static void Prefix(MongoId sessionId, out IDisposable __state)
+    {
+        __state = VirtualStashService.OpenStash(sessionId);
     }
 
     [PatchFinalizer]
