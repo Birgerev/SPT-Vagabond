@@ -95,6 +95,7 @@ public sealed class VagabondLoader : IOnLoad
         new Patches.InventoryHelperAddItemToStashPatch().Enable();
         new Patches.InventoryHelperCanPlaceItemsInInventoryPatch().Enable();
         new Patches.InsuranceControllerCostPatch().Enable();
+        new Patches.ProfileFixerFixOrphanedInsurancePatch().Enable();
         new Patches.InventoryCallbacksTagItemPatch().Enable();
         new Patches.InventoryCallbacksSortInventoryPatch().Enable();
         new Patches.InventoryCallbacksPinOrLockPatch().Enable();
